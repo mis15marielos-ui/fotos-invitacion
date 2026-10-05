@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Comparte tus fotos</title>
+  <title>Marielos - Mis XV Años</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -14,110 +15,311 @@
     body {
       margin: 0;
       min-height: 100vh;
+      font-family: Georgia, "Times New Roman", serif;
+
+      background:
+        radial-gradient(
+          circle at top,
+          #8f0000 0%,
+          #650000 45%,
+          #320000 100%
+        );
+
+      color: white;
+
       display: flex;
-      align-items: center;
       justify-content: center;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #ffffff;
-      color: #222222;
+      align-items: center;
+
+      padding: 25px 15px;
     }
+
 
     .contenedor {
-      width: min(92%, 430px);
+
+      width: 100%;
+      max-width: 430px;
+
       text-align: center;
-      padding: 30px 18px;
+
+      padding: 35px 22px;
+
+      border: 1px solid rgba(212,175,55,0.7);
+
+      border-radius: 24px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(120,0,0,0.92),
+          rgba(55,0,0,0.96)
+        );
+
+      box-shadow:
+        0 0 25px rgba(0,0,0,0.45),
+        inset 0 0 25px rgba(212,175,55,0.08);
     }
 
-    h1 {
+
+    .decoracion {
+
+      color: #d4af37;
+
+      font-size: 25px;
+
+      letter-spacing: 8px;
+
+      margin-bottom: 12px;
+    }
+
+
+    .nombre {
+
+      margin: 0;
+
+      font-size: 42px;
+
+      font-weight: normal;
+
+      color: #f5d77a;
+
+      letter-spacing: 3px;
+
+      text-shadow:
+        0 2px 5px #000;
+    }
+
+
+    .xv {
+
+      margin-top: 4px;
+
       font-size: 26px;
-      margin: 0 0 12px;
-      font-weight: 700;
+
+      letter-spacing: 6px;
+
+      color: #ffffff;
+
+      text-transform: uppercase;
     }
 
-    p {
-      font-size: 16px;
-      line-height: 1.45;
-      margin: 0 0 26px;
-      color: #555555;
+
+    .linea {
+
+      width: 100px;
+
+      height: 2px;
+
+      background: #d4af37;
+
+      margin: 20px auto;
     }
+
+
+    .mensaje {
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      font-size: 16px;
+
+      line-height: 1.5;
+
+      color: #f8eeee;
+
+      margin-bottom: 28px;
+    }
+
 
     button,
     .boton-galeria {
+
       width: 100%;
-      border: 0;
-      border-radius: 10px;
+
+      border: 1px solid #d4af37;
+
+      border-radius: 12px;
+
       padding: 15px 18px;
-      margin: 8px 0;
+
+      margin: 9px 0;
+
+      font-family: Arial, Helvetica, sans-serif;
+
       font-size: 17px;
-      font-weight: 600;
+
+      font-weight: bold;
+
       cursor: pointer;
+
       display: block;
-      background: #222222;
-      color: white;
+
+      background:
+        linear-gradient(
+          135deg,
+          #d4af37,
+          #f4df8a,
+          #b8860b
+        );
+
+      color: #4a0000;
+
+      box-shadow:
+        0 4px 10px rgba(0,0,0,0.3);
+
+      transition: transform 0.15s ease;
     }
+
+
+    button:active,
+    .boton-galeria:active {
+
+      transform: scale(0.97);
+
+    }
+
 
     .boton-secundario {
-      background: #eeeeee;
-      color: #222222;
+
+      background: transparent;
+
+      color: #f5d77a;
+
+      box-shadow: none;
     }
+
 
     input[type="file"] {
+
       display: none;
+
     }
 
-    #mensaje {
+
+    #mensajeEstado {
+
       min-height: 24px;
-      margin-top: 15px;
+
+      margin-top: 18px;
+
+      font-family: Arial, Helvetica, sans-serif;
+
       font-size: 14px;
-      color: #555555;
+
+      color: #f5d77a;
     }
+
 
     #vistaPrevia {
-      max-width: 100%;
-      max-height: 280px;
-      border-radius: 12px;
-      margin: 14px auto;
+
+      width: 100%;
+
+      max-height: 300px;
+
+      object-fit: contain;
+
+      border-radius: 15px;
+
+      margin: 18px auto;
+
       display: none;
+
+      border: 1px solid #d4af37;
     }
+
 
     #camara {
+
       display: none;
-      margin-top: 15px;
+
+      margin-top: 18px;
     }
+
 
     video {
+
       width: 100%;
-      border-radius: 12px;
-      background: #111111;
+
+      border-radius: 15px;
+
+      background: #000;
+
+      border: 1px solid #d4af37;
     }
 
-    .texto-pequeno {
-      font-size: 13px;
-      color: #777777;
-      margin-top: 10px;
+
+    .texto-final {
+
+      margin-top: 24px;
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      font-size: 12px;
+
+      color: rgba(255,255,255,0.65);
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
   <main class="contenedor">
 
-    <h1>¡Gracias por acompañarnos!</h1>
 
-    <p>
-      Comparte tus fotos con nosotros.
-    </p>
+    <div class="decoracion">
+      ✦ ✧ ✦
+    </div>
+
+
+    <h1 class="nombre">
+      Marielos
+    </h1>
+
+
+    <div class="xv">
+      Mis XV Años
+    </div>
+
+
+    <div class="linea"></div>
+
+
+    <div class="mensaje">
+
+      ¡Gracias por celebrar este momento
+      tan especial conmigo!
+
+      <br>
+
+      Comparte tus mejores fotos
+      y recuerdos de esta noche.
+
+    </div>
+
 
     <!-- TOMAR FOTO -->
+
     <button id="botonCamara">
+
       📸 Tomar Foto
+
     </button>
 
-    <!-- SUBIR DESDE GALERÍA -->
-    <label class="boton-galeria" for="galeria">
+
+    <!-- GALERÍA -->
+
+    <label
+      class="boton-galeria"
+      for="galeria"
+    >
+
       🖼️ Subir desde galería
+
     </label>
+
 
     <input
       id="galeria"
@@ -125,17 +327,24 @@
       accept="image/*"
     >
 
+
     <!-- VOLTEAR CÁMARA -->
+
     <button
       id="botonVoltear"
       class="boton-secundario"
       style="display:none;"
     >
+
       🔄 Voltear Cámara
+
     </button>
 
+
     <!-- CÁMARA -->
+
     <div id="camara">
+
 
       <video
         id="video"
@@ -143,422 +352,498 @@
         playsinline
       ></video>
 
+
       <button id="botonCapturar">
+
         📷 Capturar foto
+
       </button>
+
 
       <button
         id="botonCerrar"
         class="boton-secundario"
       >
+
         Cerrar cámara
+
       </button>
 
+
     </div>
+
 
     <!-- VISTA PREVIA -->
+
     <img
       id="vistaPrevia"
-      alt="Vista previa de la foto"
+      alt="Vista previa"
     >
 
-    <!-- MENSAJE -->
-    <div id="mensaje"></div>
 
-    <div class="texto-pequeno">
-      La foto se subirá automáticamente.
+    <!-- MENSAJE -->
+
+    <div id="mensajeEstado"></div>
+
+
+    <div class="texto-final">
+
+      Tus fotos se guardarán automáticamente
+      para compartir este momento.
+
     </div>
+
 
   </main>
 
 
-  <script>
-
-    /*
-      CONFIGURACIÓN DE CLOUDINARY
-    */
-
-    const NOMBRE_CLOUDINARY = "cguipzza";
-
-    const PRESET_CLOUDINARY = "fotos-invitacion";
+<script>
 
 
-    /*
-      ELEMENTOS DE LA PÁGINA
-    */
+/* =========================================
+   CONFIGURACIÓN CLOUDINARY
+   ========================================= */
 
-    const botonCamara =
-      document.getElementById("botonCamara");
+const NOMBRE_CLOUDINARY = "cguipzza";
 
-    const galeria =
-      document.getElementById("galeria");
-
-    const botonVoltear =
-      document.getElementById("botonVoltear");
-
-    const camara =
-      document.getElementById("camara");
-
-    const video =
-      document.getElementById("video");
-
-    const botonCapturar =
-      document.getElementById("botonCapturar");
-
-    const botonCerrar =
-      document.getElementById("botonCerrar");
-
-    const vistaPrevia =
-      document.getElementById("vistaPrevia");
-
-    const mensaje =
-      document.getElementById("mensaje");
+const PRESET_CLOUDINARY = "fotos-invitacion";
 
 
-    /*
-      VARIABLES DE LA CÁMARA
-    */
+/* =========================================
+   ELEMENTOS
+   ========================================= */
 
-    let transmision = null;
+const botonCamara =
+  document.getElementById("botonCamara");
 
-    let camaraActual = "environment";
+const galeria =
+  document.getElementById("galeria");
 
+const botonVoltear =
+  document.getElementById("botonVoltear");
 
-    /*
-      MOSTRAR MENSAJES
-    */
+const camara =
+  document.getElementById("camara");
 
-    function mostrarMensaje(texto) {
+const video =
+  document.getElementById("video");
 
-      mensaje.textContent = texto;
+const botonCapturar =
+  document.getElementById("botonCapturar");
 
-    }
+const botonCerrar =
+  document.getElementById("botonCerrar");
 
+const vistaPrevia =
+  document.getElementById("vistaPrevia");
 
-    /*
-      SUBIR FOTO A CLOUDINARY
-    */
-
-    async function subirFoto(archivo) {
-
-      if (!archivo) {
-        return;
-      }
-
-      mostrarMensaje("Subiendo foto...");
-
-      /*
-        Mostrar vista previa
-      */
-
-      vistaPrevia.src =
-        URL.createObjectURL(archivo);
-
-      vistaPrevia.style.display = "block";
+const mensajeEstado =
+  document.getElementById("mensajeEstado");
 
 
-      /*
-        Preparar información para Cloudinary
-      */
+/* =========================================
+   VARIABLES DE CÁMARA
+   ========================================= */
 
-      const datos =
-        new FormData();
+let transmision = null;
 
-      datos.append(
-        "file",
-        archivo
+let camaraActual = "environment";
+
+
+/* =========================================
+   MENSAJES
+   ========================================= */
+
+function mostrarMensaje(texto) {
+
+  mensajeEstado.textContent = texto;
+
+}
+
+
+/* =========================================
+   SUBIR FOTO A CLOUDINARY
+   ========================================= */
+
+async function subirFoto(archivo) {
+
+  if (!archivo) {
+
+    return;
+
+  }
+
+
+  mostrarMensaje(
+    "Subiendo tu foto..."
+  );
+
+
+  /* Vista previa */
+
+  vistaPrevia.src =
+    URL.createObjectURL(archivo);
+
+  vistaPrevia.style.display =
+    "block";
+
+
+  /* Preparar información */
+
+  const datos =
+    new FormData();
+
+
+  datos.append(
+    "file",
+    archivo
+  );
+
+
+  datos.append(
+    "upload_preset",
+    PRESET_CLOUDINARY
+  );
+
+
+  try {
+
+
+    const respuesta =
+      await fetch(
+
+        `https://api.cloudinary.com/v1_1/${NOMBRE_CLOUDINARY}/image/upload`,
+
+        {
+
+          method: "POST",
+
+          body: datos
+
+        }
+
       );
 
-      datos.append(
-        "upload_preset",
-        PRESET_CLOUDINARY
+
+    const resultado =
+      await respuesta.json();
+
+
+    if (!respuesta.ok) {
+
+      throw new Error(
+
+        resultado.error?.message ||
+        "No se pudo subir la foto."
+
       );
 
-
-      try {
-
-        const respuesta =
-          await fetch(
-            `https://api.cloudinary.com/v1_1/${NOMBRE_CLOUDINARY}/image/upload`,
-            {
-              method: "POST",
-              body: datos
-            }
-          );
+    }
 
 
-        const resultado =
-          await respuesta.json();
+    mostrarMensaje(
+      "✨ ¡Tu foto se subió correctamente! ❤️"
+    );
 
 
-        if (!respuesta.ok) {
+  }
 
-          throw new Error(
-            resultado.error?.message ||
-            "No se pudo subir la foto."
-          );
-
-        }
+  catch (error) {
 
 
-        mostrarMensaje(
-          "✅ ¡Foto subida correctamente!"
-        );
+    console.error(error);
 
 
-      } catch (error) {
+    mostrarMensaje(
+      "❌ No se pudo subir la foto. Inténtalo nuevamente."
+    );
 
-        console.error(error);
 
-        mostrarMensaje(
-          "❌ No se pudo subir la foto. Inténtalo de nuevo."
-        );
+  }
 
-      }
+}
+
+
+/* =========================================
+   GALERÍA
+   ========================================= */
+
+galeria.addEventListener(
+
+  "change",
+
+  function(evento) {
+
+
+    const archivo =
+      evento.target.files[0];
+
+
+    if (archivo) {
+
+      subirFoto(archivo);
 
     }
 
 
-    /*
-      SUBIR FOTO DESDE GALERÍA
-    */
+    evento.target.value = "";
 
-    galeria.addEventListener(
-      "change",
-      function(evento) {
+  }
 
-        const archivo =
-          evento.target.files[0];
-
-        if (archivo) {
-
-          subirFoto(archivo);
-
-        }
-
-        /*
-          Permite volver a seleccionar
-          la misma foto posteriormente.
-        */
-
-        evento.target.value = "";
-
-      }
-    );
+);
 
 
-    /*
-      ABRIR CÁMARA
-    */
+/* =========================================
+   INICIAR CÁMARA
+   ========================================= */
 
-    async function iniciarCamara() {
-
-      try {
-
-        /*
-          Si ya existe una cámara abierta,
-          la cerramos primero.
-        */
-
-        if (transmision) {
-
-          transmision
-            .getTracks()
-            .forEach(
-              pista => pista.stop()
-            );
-
-        }
+async function iniciarCamara() {
 
 
-        /*
-          Solicitar acceso a la cámara
-        */
-
-        transmision =
-          await navigator.mediaDevices.getUserMedia(
-            {
-              video: {
-                facingMode: {
-                  ideal: camaraActual
-                }
-              },
-
-              audio: false
-            }
-          );
+  try {
 
 
-        video.srcObject =
-          transmision;
+    if (transmision) {
 
-
-        camara.style.display =
-          "block";
-
-
-        botonVoltear.style.display =
-          "block";
-
-
-        mostrarMensaje("");
-
-      } catch (error) {
-
-        console.error(error);
-
-        mostrarMensaje(
-          "❌ No se pudo abrir la cámara. Revisa el permiso del navegador."
+      transmision
+        .getTracks()
+        .forEach(
+          pista => pista.stop()
         );
-
-      }
 
     }
 
 
-    /*
-      BOTÓN TOMAR FOTO
-    */
+    transmision =
+      await navigator.mediaDevices.getUserMedia(
 
-    botonCamara.addEventListener(
-      "click",
-      iniciarCamara
-    );
+        {
 
+          video: {
 
-    /*
-      VOLTEAR CÁMARA
-    */
+            facingMode: {
 
-    botonVoltear.addEventListener(
-      "click",
-      async function() {
-
-        if (
-          camaraActual === "environment"
-        ) {
-
-          camaraActual = "user";
-
-        } else {
-
-          camaraActual = "environment";
-
-        }
-
-
-        await iniciarCamara();
-
-      }
-    );
-
-
-    /*
-      CAPTURAR FOTO
-    */
-
-    botonCapturar.addEventListener(
-      "click",
-      function() {
-
-        const lienzo =
-          document.createElement("canvas");
-
-
-        lienzo.width =
-          video.videoWidth;
-
-
-        lienzo.height =
-          video.videoHeight;
-
-
-        const contexto =
-          lienzo.getContext("2d");
-
-
-        contexto.drawImage(
-          video,
-          0,
-          0
-        );
-
-
-        /*
-          Convertir la imagen
-          a formato JPG
-        */
-
-        lienzo.toBlob(
-          function(blob) {
-
-            if (blob) {
-
-              const archivo =
-                new File(
-                  [
-                    blob
-                  ],
-
-                  `foto-${Date.now()}.jpg`,
-
-                  {
-                    type: "image/jpeg"
-                  }
-                );
-
-
-              subirFoto(archivo);
+              ideal: camaraActual
 
             }
 
           },
 
-          "image/jpeg",
+          audio: false
 
-          0.90
-        );
+        }
 
-      }
+      );
+
+
+    video.srcObject =
+      transmision;
+
+
+    camara.style.display =
+      "block";
+
+
+    botonVoltear.style.display =
+      "block";
+
+
+    mostrarMensaje("");
+
+  }
+
+
+  catch (error) {
+
+
+    console.error(error);
+
+
+    mostrarMensaje(
+      "❌ No se pudo abrir la cámara. Revisa los permisos del navegador."
     );
 
 
-    /*
-      CERRAR CÁMARA
-    */
+  }
 
-    botonCerrar.addEventListener(
-      "click",
-      function() {
+}
 
-        if (transmision) {
 
-          transmision
-            .getTracks()
-            .forEach(
-              pista => pista.stop()
+/* =========================================
+   BOTÓN TOMAR FOTO
+   ========================================= */
+
+botonCamara.addEventListener(
+
+  "click",
+
+  iniciarCamara
+
+);
+
+
+/* =========================================
+   VOLTEAR CÁMARA
+   ========================================= */
+
+botonVoltear.addEventListener(
+
+  "click",
+
+  async function() {
+
+
+    if (
+      camaraActual === "environment"
+    ) {
+
+      camaraActual = "user";
+
+    }
+
+    else {
+
+      camaraActual = "environment";
+
+    }
+
+
+    await iniciarCamara();
+
+
+  }
+
+);
+
+
+/* =========================================
+   CAPTURAR FOTO
+   ========================================= */
+
+botonCapturar.addEventListener(
+
+  "click",
+
+  function() {
+
+
+    const lienzo =
+      document.createElement("canvas");
+
+
+    lienzo.width =
+      video.videoWidth;
+
+
+    lienzo.height =
+      video.videoHeight;
+
+
+    const contexto =
+      lienzo.getContext("2d");
+
+
+    contexto.drawImage(
+
+      video,
+
+      0,
+
+      0
+
+    );
+
+
+    lienzo.toBlob(
+
+      function(blob) {
+
+
+        if (blob) {
+
+
+          const archivo =
+            new File(
+
+              [blob],
+
+              `Marielos-XV-${Date.now()}.jpg`,
+
+              {
+
+                type:
+                  "image/jpeg"
+
+              }
+
             );
+
+
+          subirFoto(archivo);
+
 
         }
 
 
-        transmision = null;
+      },
 
+      "image/jpeg",
 
-        video.srcObject = null;
+      0.90
 
-
-        camara.style.display =
-          "none";
-
-
-        botonVoltear.style.display =
-          "none";
-
-      }
     );
 
-  </script>
+
+  }
+
+);
+
+
+/* =========================================
+   CERRAR CÁMARA
+   ========================================= */
+
+botonCerrar.addEventListener(
+
+  "click",
+
+  function() {
+
+
+    if (transmision) {
+
+
+      transmision
+        .getTracks()
+        .forEach(
+          pista => pista.stop()
+        );
+
+
+    }
+
+
+    transmision = null;
+
+
+    video.srcObject = null;
+
+
+    camara.style.display =
+      "none";
+
+
+    botonVoltear.style.display =
+      "none";
+
+
+  }
+
+);
+
+
+</script>
+
 
 </body>
 </html>
