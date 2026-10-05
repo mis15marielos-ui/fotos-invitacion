@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Comparte tus fotos</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
+      color: #222222;
+    }
+
+    .contenedor {
+      width: min(92%, 430px);
+      text-align: center;
+      padding: 30px 18px;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin: 0 0 12px;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.45;
+      margin: 0 0 26px;
+      color: #555555;
+    }
+
+    button,
+    .boton-galeria {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: 15px 18px;
+      margin: 8px 0;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      display: block;
+      background: #222222;
+      color: white;
+    }
+
+    .boton-secundario {
+      background: #eeeeee;
+      color: #222222;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    #mensaje {
+      min-height: 24px;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555555;
+    }
+
+    #vistaPrevia {
+      max-width: 100%;
+      max-height: 280px;
+      border-radius: 12px;
+      margin: 14px auto;
+      display: none;
+    }
+
+    #camara {
+      display: none;
+      margin-top: 15px;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 12px;
+      background: #111111;
+    }
+
+    .texto-pequeno {
+      font-size: 13px;
+      color: #777777;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="contenedor">
+
+    <h1>¡Gracias por acompañarnos!</h1>
+
+    <p>
+      Comparte tus fotos con nosotros.
+    </p>
+
+    <!-- TOMAR FOTO -->
+    <button id="botonCamara">
+      📸 Tomar Foto
+    </button>
+
+    <!-- SUBIR DESDE GALERÍA -->
+    <label class="boton-galeria" for="galeria">
+      🖼️ Subir desde galería
+    </label>
+
+    <input
+      id="galeria"
+      type="file"
+      accept="image/*"
+    >
+
+    <!-- VOLTEAR CÁMARA -->
+    <button
+      id="botonVoltear"
+      class="boton-secundario"
+      style="display:none;"
+    >
+      🔄 Voltear Cámara
+    </button>
+
+    <!-- CÁMARA -->
+    <div id="camara">
+
+      <video
+        id="video"
+        autoplay
+        playsinline
+      ></video>
+
+      <button id="botonCapturar">
+        📷 Capturar foto
+      </button>
+
+      <button
+        id="botonCerrar"
+        class="boton-secundario"
+      >
+        Cerrar cámara
+      </button>
+
+    </div>
+
+    <!-- VISTA PREVIA -->
+    <img
+      id="vistaPrevia"
+      alt="Vista previa de la foto"
+    >
+
+    <!-- MENSAJE -->
+    <div id="mensaje"></div>
+
+    <div class="texto-pequeno">
+      La foto se subirá automáticamente.
+    </div>
+
+  </main>
+
+
+  <script>
+
+    /*
+      CONFIGURACIÓN DE CLOUDINARY
+    */
+
+    const NOMBRE_CLOUDINARY = "cguipzza";
+
+    const PRESET_CLOUDINARY = "fotos-invitacion";
+
+
+    /*
+      ELEMENTOS DE LA PÁGINA
+    */
+
+    const botonCamara =
+      document.getElementById("botonCamara");
+
+    const galeria =
+      document.getElementById("galeria");
+
+    const botonVoltear =
+      document.getElementById("botonVoltear");
+
+    const camara =
+      document.getElementById("camara");
+
+    const video =
+      document.getElementById("video");
+
+    const botonCapturar =
+      document.getElementById("botonCapturar");
+
+    const botonCerrar =
+      document.getElementById("botonCerrar");
+
+    const vistaPrevia =
+      document.getElementById("vistaPrevia");
+
+    const mensaje =
+      document.getElementById("mensaje");
+
+
+    /*
+      VARIABLES DE LA CÁMARA
+    */
+
+    let transmision = null;
+
+    let camaraActual = "environment";
+
+
+    /*
+      MOSTRAR MENSAJES
+    */
+
+    function mostrarMensaje(texto) {
+
+      mensaje.textContent = texto;
+
+    }
+
+
+    /*
+      SUBIR FOTO A CLOUDINARY
+    */
+
+    async function subirFoto(archivo) {
+
+      if (!archivo) {
+        return;
+      }
+
+      mostrarMensaje("Subiendo foto...");
+
+      /*
+        Mostrar vista previa
+      */
+
+      vistaPrevia.src =
+        URL.createObjectURL(archivo);
+
+      vistaPrevia.style.display = "block";
+
+
+      /*
+        Preparar información para Cloudinary
+      */
+
+      const datos =
+        new FormData();
+
+      datos.append(
+        "file",
+        archivo
+      );
+
+      datos.append(
+        "upload_preset",
+        PRESET_CLOUDINARY
+      );
+
+
+      try {
+
+        const respuesta =
+          await fetch(
+            `https://api.cloudinary.com/v1_1/${NOMBRE_CLOUDINARY}/image/upload`,
+            {
+              method: "POST",
+              body: datos
+            }
+          );
+
+
+        const resultado =
+          await respuesta.json();
+
+
+        if (!respuesta.ok) {
+
+          throw new Error(
+            resultado.error?.message ||
+            "No se pudo subir la foto."
+          );
+
+        }
+
+
+        mostrarMensaje(
+          "✅ ¡Foto subida correctamente!"
+        );
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        mostrarMensaje(
+          "❌ No se pudo subir la foto. Inténtalo de nuevo."
+        );
+
+      }
+
+    }
+
+
+    /*
+      SUBIR FOTO DESDE GALERÍA
+    */
+
+    galeria.addEventListener(
+      "change",
+      function(evento) {
+
+        const archivo =
+          evento.target.files[0];
+
+        if (archivo) {
+
+          subirFoto(archivo);
+
+        }
+
+        /*
+          Permite volver a seleccionar
+          la misma foto posteriormente.
+        */
+
+        evento.target.value = "";
+
+      }
+    );
+
+
+    /*
+      ABRIR CÁMARA
+    */
+
+    async function iniciarCamara() {
+
+      try {
+
+        /*
+          Si ya existe una cámara abierta,
+          la cerramos primero.
+        */
+
+        if (transmision) {
+
+          transmision
+            .getTracks()
+            .forEach(
+              pista => pista.stop()
+            );
+
+        }
+
+
+        /*
+          Solicitar acceso a la cámara
+        */
+
+        transmision =
+          await navigator.mediaDevices.getUserMedia(
+            {
+              video: {
+                facingMode: {
+                  ideal: camaraActual
+                }
+              },
+
+              audio: false
+            }
+          );
+
+
+        video.srcObject =
+          transmision;
+
+
+        camara.style.display =
+          "block";
+
+
+        botonVoltear.style.display =
+          "block";
+
+
+        mostrarMensaje("");
+
+      } catch (error) {
+
+        console.error(error);
+
+        mostrarMensaje(
+          "❌ No se pudo abrir la cámara. Revisa el permiso del navegador."
+        );
+
+      }
+
+    }
+
+
+    /*
+      BOTÓN TOMAR FOTO
+    */
+
+    botonCamara.addEventListener(
+      "click",
+      iniciarCamara
+    );
+
+
+    /*
+      VOLTEAR CÁMARA
+    */
+
+    botonVoltear.addEventListener(
+      "click",
+      async function() {
+
+        if (
+          camaraActual === "environment"
+        ) {
+
+          camaraActual = "user";
+
+        } else {
+
+          camaraActual = "environment";
+
+        }
+
+
+        await iniciarCamara();
+
+      }
+    );
+
+
+    /*
+      CAPTURAR FOTO
+    */
+
+    botonCapturar.addEventListener(
+      "click",
+      function() {
+
+        const lienzo =
+          document.createElement("canvas");
+
+
+        lienzo.width =
+          video.videoWidth;
+
+
+        lienzo.height =
+          video.videoHeight;
+
+
+        const contexto =
+          lienzo.getContext("2d");
+
+
+        contexto.drawImage(
+          video,
+          0,
+          0
+        );
+
+
+        /*
+          Convertir la imagen
+          a formato JPG
+        */
+
+        lienzo.toBlob(
+          function(blob) {
+
+            if (blob) {
+
+              const archivo =
+                new File(
+                  [
+                    blob
+                  ],
+
+                  `foto-${Date.now()}.jpg`,
+
+                  {
+                    type: "image/jpeg"
+                  }
+                );
+
+
+              subirFoto(archivo);
+
+            }
+
+          },
+
+          "image/jpeg",
+
+          0.90
+        );
+
+      }
+    );
+
+
+    /*
+      CERRAR CÁMARA
+    */
+
+    botonCerrar.addEventListener(
+      "click",
+      function() {
+
+        if (transmision) {
+
+          transmision
+            .getTracks()
+            .forEach(
+              pista => pista.stop()
+            );
+
+        }
+
+
+        transmision = null;
+
+
+        video.srcObject = null;
+
+
+        camara.style.display =
+          "none";
+
+
+        botonVoltear.style.display =
+          "none";
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
