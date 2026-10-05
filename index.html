@@ -477,96 +477,217 @@ function mostrarMensaje(texto) {
 async function subirFoto(archivo) {
 
   if (!archivo) {
-
     return;
-
   }
-
-
-  mostrarMensaje(
-    "Subiendo tu foto..."
-  );
-
-
-  /* Vista previa */
-
-  vistaPrevia.src =
-    URL.createObjectURL(archivo);
-
-  vistaPrevia.style.display =
-    "block";
-
-
-  /* Preparar información */
-
-  const datos =
-    new FormData();
-
-
-  datos.append(
-    "file",
-    archivo
-  );
-
-
-  datos.append(
-    "upload_preset",
-    PRESET_CLOUDINARY
-  );
-
 
   try {
 
+    mostrarMensaje("Preparando tu foto...");
 
-    const respuesta =
-      await fetch(
+    /* =========================================
+       OPTIMIZAR FOTO
+       ========================================= */
 
-        `https://api.cloudinary.com/v1_1/${NOMBRE_CLOUDINARY}/image/upload`,
+    const imagen = new Image();
 
-        {
+    const urlOriginal =
+      URL.createObjectURL(archivo);
 
-          method: "POST",
+    imagen.onload = async function() {
 
-          body: datos
+      URL.revokeObjectURL(urlOriginal);
+
+      const MAX_DIMENSION = 2500;
+
+      let ancho = imagen.width;
+      let alto = imagen.height;
+
+      /* Reducir solamente si supera 2500 px */
+
+      if (
+        ancho > MAX_DIMENSION ||
+        alto > MAX_DIMENSION
+      ) {
+
+        if (ancho > alto) {
+
+          alto = Math.round(
+            (alto * MAX_DIMENSION) / ancho
+          );
+
+          ancho = MAX_DIMENSION;
+
+        } else {
+
+          ancho = Math.round(
+            (ancho * MAX_DIMENSION) / alto
+          );
+
+          alto = MAX_DIMENSION;
 
         }
 
+      }
+
+
+      /* Crear imagen optimizada */
+
+      const canvas =
+        document.createElement("canvas");
+
+      canvas.width = ancho;
+      canvas.height = alto;
+
+
+      const contexto =
+        canvas.getContext("2d");
+
+
+      contexto.drawImage(
+        imagen,
+        0,
+        0,
+        ancho,
+        alto
       );
 
 
-    const resultado =
-      await respuesta.json();
+      /* Vista previa */
+
+      canvas.toBlob(
+
+        async function(blob) {
+
+          if (!blob) {
+
+            mostrarMensaje(
+              "❌ No se pudo preparar la foto."
+            );
+
+            return;
+
+          }
 
 
-    if (!respuesta.ok) {
+          vistaPrevia.src =
+            URL.createObjectURL(blob);
 
-      throw new Error(
+          vistaPrevia.style.display =
+            "block";
 
-        resultado.error?.message ||
-        "No se pudo subir la foto."
+
+          mostrarMensaje(
+            "Subiendo tu foto..."
+          );
+
+
+          /* =========================================
+             SUBIR A CLOUDINARY
+             ========================================= */
+
+          const datos =
+            new FormData();
+
+
+          datos.append(
+            "file",
+            blob,
+            "foto.jpg"
+          );
+
+
+          datos.append(
+            "upload_preset",
+            PRESET_CLOUDINARY
+          );
+
+
+          try {
+
+            const respuesta =
+              await fetch(
+
+                `https://api.cloudinary.com/v1_1/${NOMBRE_CLOUDINARY}/image/upload`,
+
+                {
+
+                  method: "POST",
+
+                  body: datos
+
+                }
+
+              );
+
+
+            const resultado =
+              await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+              throw new Error(
+
+                resultado.error?.message ||
+                "No se pudo subir la foto."
+
+              );
+
+            }
+
+
+            mostrarMensaje(
+              "✨ ¡Tu foto se subió correctamente! ❤️"
+            );
+
+
+          }
+
+          catch (error) {
+
+            console.error(error);
+
+            mostrarMensaje(
+              "❌ No se pudo subir la foto. Inténtalo nuevamente."
+            );
+
+          }
+
+        },
+
+        "image/jpeg",
+
+        0.88
 
       );
 
-    }
+    };
 
 
-    mostrarMensaje(
-      "✨ ¡Tu foto se subió correctamente! ❤️"
-    );
+    imagen.onerror = function() {
+
+      URL.revokeObjectURL(urlOriginal);
+
+      mostrarMensaje(
+        "❌ No se pudo preparar la foto."
+      );
+
+    };
+
+
+    imagen.src =
+      urlOriginal;
 
 
   }
 
   catch (error) {
 
-
     console.error(error);
 
-
     mostrarMensaje(
-      "❌ No se pudo subir la foto. Inténtalo nuevamente."
+      "❌ Ocurrió un error al preparar la foto."
     );
-
 
   }
 
